@@ -1,4 +1,5 @@
 verify-tools:
+  image: registry.127.0.0.1.nip.io/gitlab/gitlab-docker-runner:latest
   tags:
     - k8s
   script:
