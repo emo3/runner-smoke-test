@@ -1,7 +1,8 @@
 test-runner:
-  image: alpine:latest
+  image: gitlab-registry.gitlab.svc.cluster.local:5000/gitlab/gitlab-docker-runner:latest
   tags:
     - k8s
   script:
-    - echo "runner works"
+    - echo "runner works with the gdr image"
     - uname -a
+    - /usr/local/bin/verify-tools.sh
