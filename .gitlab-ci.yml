@@ -1,8 +1,26 @@
-test-runner:
-  image: gitlab-registry.gitlab.svc.cluster.local:5000/gitlab/gitlab-docker-runner:latest
+variables:
+  DOCKER_HOST: "tcp://docker:2375"
+  DOCKER_TLS_CERTDIR: ""
+  CI_REGISTRY_INTERNAL: "gitlab-registry.gitlab.svc.cluster.local:5000"
+  GDR_IMAGE: "$CI_REGISTRY_INTERNAL/gitlab/gitlab-docker-runner:latest"
+
+verify-gdr-image:
+  image: docker:29-cli
+  services:
+    - name: docker:29-dind
+      alias: docker
+      command:
+        - "--tls=false"
+        - "--insecure-registry=gitlab-registry.gitlab.svc.cluster.local:5000"
   tags:
     - k8s
+  before_script:
+    - |
+      for i in $(seq 1 30); do
+        docker info && break
+        sleep 2
+      done
+    - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY_INTERNAL" --username "$CI_REGISTRY_USER" --password-stdin
   script:
-    - echo "runner works with the gdr image"
-    - uname -a
-    - /usr/local/bin/verify-tools.sh
+    - docker pull "$GDR_IMAGE"
+    - docker run --rm "$GDR_IMAGE" /usr/local/bin/verify-tools.sh
