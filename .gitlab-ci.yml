@@ -1,0 +1,7 @@
+test-runner:
+  image: alpine:latest
+  tags:
+    - k8s
+  script:
+    - echo "runner works"
+    - uname -a
