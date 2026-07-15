@@ -10,7 +10,7 @@ The pipeline runs one job:
 
 - Job: `verify-tools`
 - Runner tag: `local`
-- Image: `registry.127.0.0.1.nip.io/gitlab/gitlab-docker-runner:latest`
+- Image: the immutable developer image configured as the runner default
 - Command: `/usr/local/bin/verify-tools.sh`
 
 A passing pipeline confirms that:
@@ -23,9 +23,8 @@ A passing pipeline confirms that:
 
 - A reachable GitLab instance for this project.
 - A registered runner with the `local` tag.
-- The local registry image
-  `registry.127.0.0.1.nip.io/gitlab/gitlab-docker-runner:latest` published and
-  pullable from the runner environment.
+- The runner's configured developer image published and pullable from the
+  runner environment.
 
 ## Running The Smoke Test
 
@@ -49,6 +48,7 @@ application code.
   pod or executor environment.
 - Script failure: rebuild or inspect the runner image and verify that
   `/usr/local/bin/verify-tools.sh` exists and is executable.
+- DNS tool failure: confirm the image contains both `dig` and `nslookup`.
 
 ## Documentation History
 

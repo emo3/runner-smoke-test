@@ -3,3 +3,5 @@ verify-tools:
     - local
   script:
     - /usr/local/bin/verify-tools.sh
+    - command -v dig
+    - command -v nslookup
